@@ -1,11 +1,12 @@
 <template>
     <v-container>
-        <v-row v-for="rowIndex in 5" :key="'row-' + rowIndex">
-            <v-col v-for="colIndex in 5" :key="'col-' + rowIndex + '-' + colIndex">
+        <v-row v-for="rowIndex in 5" :key="'row-' + rowIndex" :id="'row-'+rowIndex">
+            <v-col v-for="colIndex in 5" :key="'col-' + rowIndex + '-' + colIndex" @keydown="handleEnter(rowIndex, colIndex, $event)">
                 <div class="border" :id="`cell-${rowIndex}-${colIndex}`"  :style="{ height: '5rem', width: '2rem',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem'
-                 }" contenteditable="true" @input="handleInput(rowIndex, colIndex, $event)"
-                 @keydown="handleBackspace(rowIndex, colIndex, $event)"><sup :style="{display: 'none'}"></sup></div>
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem',
+                    textTransform: 'uppercase'
+                 }" :contenteditable="isEditable" @input="handleInput(rowIndex, colIndex, $event)"
+                 @keydown="handleBackspace(rowIndex, colIndex, $event)"></div>
             </v-col>
         </v-row>
     </v-container>
@@ -13,6 +14,15 @@
 
 <script>
     export default {
+        data() {
+            return{
+                isEditable: false,
+                counter: 1
+            }
+        },
+        mounted(){
+            this.toggleDivs();
+        },
         methods:{
             handleInput(rowIndex, colIndex, event){
                 let col = document.getElementById(`cell-${rowIndex}-${colIndex}`);
@@ -33,6 +43,24 @@
                     document.getElementById(`cell-${rowIndex}-${colIndex-1}`).focus();
                     
                 }
+            },
+            handleEnter(rowIndex, colIndex, event)
+            {
+                if(event.key === 'Enter' && colIndex === 5)
+                {
+                    this.counter++;
+                    this.toggleDivs();
+                    document.getElementById(`cell-${rowIndex+1}-${1}`).focus();
+                }
+            },
+            toggleDivs()
+            {
+                document.querySelectorAll(`div[id*=cell-${this.counter}]`).forEach(div=>{
+                    div.contentEditable = !this.isEditable;
+                });
+                document.querySelectorAll(`div[id*=cell-${this.counter-1}]`).forEach(div=>{
+                    div.contentEditable = false;
+                });
             }
         },
     }
