@@ -2,11 +2,22 @@
   <v-app>
     <Header />
     <v-main>
-      <GameBoard/>
+      <GameBoard :word="getWord"/>
     </v-main>
   </v-app>
 </template>
 
-<script setup>
-  //
+<script>
+  import loadWord from '@/plugins/wordle';
+
+   export default {
+      data() {
+          return {
+              getWord: '',
+          };
+      },
+      async mounted() {
+          this.getWord = await loadWord(); 
+      },
+  };
 </script>

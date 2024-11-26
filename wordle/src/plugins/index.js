@@ -6,7 +6,9 @@
 
 // Plugins
 import vuetify from './vuetify'
+import wordle from './wordle'
 
 export function registerPlugins (app) {
-  app.use(vuetify)
+  app.use(vuetify);
+  app.use(wordle);
 }
