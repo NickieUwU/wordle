@@ -13,15 +13,22 @@
 </template>
 
 <script>
+    import validate from '@/plugins/wordle';
     export default {
+        props:{
+            word:{
+                type: String,
+                required: true
+            }
+        },
         data() {
             return{
                 isEditable: false,
                 counter: 1
             }
         },
-        mounted(){
-            this.toggleDivs();
+        async mounted(){
+            await this.toggleDivs();
         },
         methods:{
             handleInput(rowIndex, colIndex, event){
@@ -48,17 +55,18 @@
             {
                 if(event.key === 'Enter' && colIndex === 5)
                 {
+                    validate(word,);
                     this.counter++;
                     this.toggleDivs();
                     document.getElementById(`cell-${rowIndex+1}-${1}`).focus();
                 }
             },
-            toggleDivs()
+            async toggleDivs()
             {
-                document.querySelectorAll(`div[id*=cell-${this.counter}]`).forEach(div=>{
+                await document.querySelectorAll(`div[id*=cell-${this.counter}]`).forEach(div=>{
                     div.contentEditable = !this.isEditable;
                 });
-                document.querySelectorAll(`div[id*=cell-${this.counter-1}]`).forEach(div=>{
+                await document.querySelectorAll(`div[id*=cell-${this.counter-1}]`).forEach(div=>{
                     div.contentEditable = false;
                 });
             }

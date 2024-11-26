@@ -5,8 +5,15 @@ const loadWord = async () => {
     return randomWord;
 };
 
-const validate = async () => {
-    
+const validate = async (guess, word, words) => {
+    if(!words.includes(word) || !word)
+    {
+        return "This word is not valid";
+    }
+    else if(guess === word)
+    {
+        alert('You won');
+    }
 };
 
-export default loadWord;
+export default {loadWord, validate};
